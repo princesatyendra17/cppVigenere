@@ -1,10 +1,12 @@
 # cppVigenere
 
-This is a small C++ program I built to work with Vigenere ciphers.
+This is a small C++ program I am building to work with Vigenere ciphers.
 
-The following features will be included:
+The following features will be included when finished:
 
   * Help option.
   * Print a common character map
   * Encode a set of text when provided text and a key
+  * Decode a cipher when provided a cipher and key
   * When provided a set of text, programatically solve for the key
+  * When provided a set of text, programatically break the cipher.
