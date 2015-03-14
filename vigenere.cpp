@@ -1,11 +1,12 @@
 #include <iostream>
+#include <string>
 
 using std::cout; 
 using std::endl;
-using std::string;
 
 // Global configurations
-enum OPERATION {NONE, ENCRYPT, DECRYPT, CRACK, PRINT};
+enum Operation {NONE, ENCRYPT, DECRYPT, CRACK, PRINT};
+const int OFFSET = 65;
 
 // Print command line help
 void printHelp() {
@@ -35,7 +36,7 @@ void printTable() {
 }
 
 // Parse command line option
-OPERATION parseOptions(int argc, char** argv){
+Operation parseOptions(int argc, char **argv){
     char c; 
     if (argv[1][0] = '-') {
         c = argv[1][1];
@@ -53,9 +54,47 @@ OPERATION parseOptions(int argc, char** argv){
     }
 }
 
-int main(int argc, char** argv) {
-    OPERATION op = parseOptions(argc, argv);
-    char* key, * text, * cipher;
+// Encrypt provided text using the provided key
+void encrypt(char *key, char *text) {
+
+    // Convert key to upper case
+    int kCount = std::char_traits<char>::length(key);
+    for (int i = 0; i < kCount; i++) {
+        key[i] = toupper(key[i]);
+    }
+
+    // Convert text to upper case
+    int tCount = std::char_traits<char>::length(text);
+    for (int i = 0; i < tCount; i++) {
+        text[i] = toupper(text[i]);
+    }
+    
+    // Cycle through the text and key and shift each 
+    // character in the text by the amount in the key
+    for (int i = 0, k = 0; i < tCount; i++, k++) {
+        if (k >= kCount) {
+            k = 0;
+        }
+        int shift = (int)key[k] - 65;
+        if (text[i] + shift > 90) {
+            text[i] = (char)(text[i] + shift - 26);
+        } else {
+            text[i] = (char)(text[i] + shift);
+        } 
+    }
+}
+
+// Decrypt provided cipher text using the provided key
+void decrypt(char *key, char *cipher) {
+}
+
+// Crack provided cipher text using a dictionary attack
+void crack(char *cipher) {
+}
+
+int main(int argc, char **argv) {
+    Operation op = parseOptions(argc, argv);
+    char *key, *text, *cipher;
 
     switch (op) {
         case NONE   : printHelp(); break;
@@ -63,15 +102,20 @@ int main(int argc, char** argv) {
             cout << "ENCRYPT" << endl << endl; 
             key = argv[2];
             text = argv[3];
+            encrypt(key, text);
+            cout << text << endl;
             break;
         case DECRYPT: 
             cout << "DECRYPT" << endl << endl; 
             key = argv[2];
             cipher = argv[3];
+            //text = decrypt(key, cipher);
             break;
         case CRACK  : 
             cout << "CRACK" << endl << endl; 
             cipher = argv[2];
+            //key = crack(cipher);
+            //text = decrypt(key, cipher);
             break;
         case PRINT  : printTable(); break;
         default     : printHelp(); break;
