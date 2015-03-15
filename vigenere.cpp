@@ -63,15 +63,13 @@ void encrypt(char *key, char *text) {
         key[i] = toupper(key[i]);
     }
 
-    // Convert text to upper case
     int tCount = std::char_traits<char>::length(text);
-    for (int i = 0; i < tCount; i++) {
-        text[i] = toupper(text[i]);
-    }
     
     // Cycle through the text and key and shift each 
     // character in the text by the amount in the key
     for (int i = 0, k = 0; i < tCount; i++, k++) {
+        text[i] = toupper(text[i]);
+
         if (k >= kCount) {
             k = 0;
         }
