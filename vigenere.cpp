@@ -46,9 +46,9 @@ Operation parseOptions(int argc, char **argv){
     
     switch (c) {
         case 'h': return NONE;
-        case 'e': return argv[2] ? (argv[3] ? ENCRYPT : NONE) : NONE;
-        case 'd': return argv[2] ? (argv[3] ? DECRYPT : NONE) : NONE;
-        case 'c': return argv[2] ? CRACK : NONE;
+        case 'e': return argv[2] ? (argv[3] ? ENCRYPT : NONE) : NONE; 
+        case 'd': return argv[2] ? (argv[3] ? DECRYPT : NONE) : NONE; 
+        case 'c': return argv[2] ? CRACK : NONE; 
         case 'p': return PRINT;
         default : return NONE;
     }
@@ -84,6 +84,30 @@ void encrypt(char *key, char *text) {
 
 // Decrypt provided cipher text using the provided key
 void decrypt(char *key, char *cipher) {
+
+	// Convert key to upper case
+	int kCount = std::char_traits<char>::length(key);
+	for (int i = 0; i < kCount; i++) {
+		key[i] = toupper(key[i]);
+	}
+
+	int tCount = std::char_traits<char>::length(cipher);
+
+	// Cycle through the cipher and convert it to uppercase
+	// and shift the characters to the unencrypted text
+	for (int i = 0, k = 0; i < tCount; i++, k++) {
+		cipher[i] = toupper(cipher[i]);
+
+		if (k >= kCount) {
+			k = 0;
+		}
+		int shift = (int)key[k] - 65;
+		if (cipher[i] - shift < 65) {
+			cipher[i] = (char)(cipher[i] - shift + 26);
+		} else {
+			cipher[i] = (char)(cipher[i] - shift);
+		}
+	}
 }
 
 // Crack provided cipher text using a dictionary attack
@@ -91,6 +115,11 @@ void crack(char *cipher) {
 }
 
 int main(int argc, char **argv) {
+	if (argc < 2) {                                                                                           
+		printHelp();                                                                                          
+		return -1;                                                                                            
+	}
+
     Operation op = parseOptions(argc, argv);
     char *key, *text, *cipher;
 
@@ -107,7 +136,8 @@ int main(int argc, char **argv) {
             cout << "DECRYPT" << endl << endl; 
             key = argv[2];
             cipher = argv[3];
-            //text = decrypt(key, cipher);
+            decrypt(key, cipher);
+			cout << cipher << endl;
             break;
         case CRACK  : 
             cout << "CRACK" << endl << endl; 
