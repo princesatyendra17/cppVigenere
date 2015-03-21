@@ -7,4 +7,4 @@ The following features will be included:
   * Help option.
   * Print a common character map
   * Encode a set of text when provided text and a key
-  * When provided a set of text, programatically solve for the key
+  * Decode a set of text when provided a cipher and a key
