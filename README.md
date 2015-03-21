@@ -1,6 +1,6 @@
 # cppVigenere
 
-This is a small C++ program I am building to work with Vigenere ciphers.
+This is a small C++ program I am building to encrypt and decrypt Vigenere ciphers.
 
 The following features will be included when finished:
 
@@ -15,5 +15,4 @@ The following features will be included when finished:
   	* Convert alpha characters [COMPLETE]
   	* Convert numeric characters
   	* Convert cipher and key to upper case [COMPLETE]
-  * When provided a set of text, programatically attempt to solve for the key
-  * When provided a set of text, programatically attempt to break the cipher.
+
