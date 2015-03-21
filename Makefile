@@ -3,5 +3,5 @@ clean:
 	rm -f program
 
 build:
-	g++ vigenere.cpp -o vigenere 
+	g++ -std=c++11 vigenere.cpp -o vigenere 
 	./versioner.sh

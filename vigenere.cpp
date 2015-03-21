@@ -3,6 +3,7 @@
 
 using std::cout; 
 using std::endl;
+using std::string;
 
 // Global configurations
 enum Operation {NONE, ENCRYPT, DECRYPT, CRACK, PRINT};
@@ -55,58 +56,59 @@ Operation parseOptions(int argc, char **argv){
 }
 
 // Encrypt provided text using the provided key
-void encrypt(char *key, char *text) {
+void encrypt(string &key, string &text) {
 
     // Convert key to upper case
-    int kCount = std::char_traits<char>::length(key);
-    for (int i = 0; i < kCount; i++) {
-        key[i] = toupper(key[i]);
+    decltype(key.size()) kCount = key.size();
+    for (auto &k : key) {
+        k = toupper(k);
     }
 
-    int tCount = std::char_traits<char>::length(text);
-    
     // Cycle through the text and key and shift each 
     // character in the text by the amount in the key
-    for (int i = 0, k = 0; i < tCount; i++, k++) {
-        text[i] = toupper(text[i]);
-
+    int k = 0; // Iterator for key 
+    for (auto &t : text) {
         if (k >= kCount) {
             k = 0;
         }
+
+        t = toupper(t);
         int shift = (int)key[k] - 65;
-        if (text[i] + shift > 90) {
-            text[i] = (char)(text[i] + shift - 26);
+        if (t + shift > 90) {
+            t = (char)(t + shift - 26);
         } else {
-            text[i] = (char)(text[i] + shift);
-        } 
+            t = (char)(t + shift);
+        }
+        k++;
     }
+
 }
 
 // Decrypt provided cipher text using the provided key
-void decrypt(char *key, char *cipher) {
+void decrypt(string &key, string &cipher) {
 
 	// Convert key to upper case
-	int kCount = std::char_traits<char>::length(key);
-	for (int i = 0; i < kCount; i++) {
-		key[i] = toupper(key[i]);
+    decltype(key.size()) kCount = key.size();
+	for (auto &i : key) {
+		i = toupper(i);
 	}
-
-	int tCount = std::char_traits<char>::length(cipher);
 
 	// Cycle through the cipher and convert it to uppercase
 	// and shift the characters to the unencrypted text
-	for (int i = 0, k = 0; i < tCount; i++, k++) {
-		cipher[i] = toupper(cipher[i]);
-
+    int k = 0; // Iterator for key
+	for (auto &c : cipher) {
 		if (k >= kCount) {
 			k = 0;
 		}
+
+        c = toupper(c);
 		int shift = (int)key[k] - 65;
-		if (cipher[i] - shift < 65) {
-			cipher[i] = (char)(cipher[i] - shift + 26);
+		if (c - shift < 65) {
+			c = (char)(c - shift + 26);
 		} else {
-			cipher[i] = (char)(cipher[i] - shift);
+			c = (char)(c - shift);
 		}
+        k++;
 	}
 }
 
@@ -121,7 +123,8 @@ int main(int argc, char **argv) {
 	}
 
     Operation op = parseOptions(argc, argv);
-    char *key, *text, *cipher;
+    string key; 
+    string text, cipher;
 
     switch (op) {
         case NONE   : printHelp(); break;
@@ -139,12 +142,12 @@ int main(int argc, char **argv) {
             decrypt(key, cipher);
 			cout << cipher << endl;
             break;
-        case CRACK  : 
+        /*case CRACK  : 
             cout << "CRACK" << endl << endl; 
             cipher = argv[2];
             //key = crack(cipher);
             //text = decrypt(key, cipher);
-            break;
+            break;*/
         case PRINT  : printTable(); break;
         default     : printHelp(); break;
     }
