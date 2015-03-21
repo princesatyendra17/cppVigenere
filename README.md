@@ -8,5 +8,3 @@ The following features will be included when finished:
   * Print a common character map
   * Encode a set of text when provided text and a key
   * Decode a cipher when provided a cipher and key
-  * When provided a set of text, programatically solve for the key
-  * When provided a set of text, programatically break the cipher.
